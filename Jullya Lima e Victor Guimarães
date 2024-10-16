@@ -1,0 +1,89 @@
+#include <stdio.h>
+
+#define NUM_NOTAS 7
+
+void exibir_quantidade(int quantidade[], int notas[]) {
+    int total = 0;
+    printf("R$ 100 R$ 50 R$ 20 R$ 10 R$ 5 R$ 2 R$ 1 Total\n");
+    for (int i = 0; i < NUM_NOTAS; i++) {
+        total += quantidade[i] * notas[i];
+    }
+    printf("Quantidade de cédulas ");
+    for (int i = 0; i < NUM_NOTAS; i++) {
+        printf("%d ", quantidade[i]);
+    }
+    printf("%d\n", total);
+}
+
+int main() {
+    int notas[NUM_NOTAS] = {100, 50, 20, 10, 5, 2, 1};
+    int quantidade[NUM_NOTAS];
+
+    // Leitura da quantidade inicial de cédulas
+    printf("Digite a quantidade inicial de cédulas (R$ 100, R$ 50, R$ 20, R$ 10, R$ 5, R$ 2, R$ 1): ");
+    for (int i = 0; i < NUM_NOTAS; i++) {
+        scanf("%d", &quantidade[i]);
+    }
+
+    exibir_quantidade(quantidade, notas);
+
+    while (1) {
+        int operacao;
+        printf("Digite a operação (0 para saque, 1 para depósito, -1 para encerrar): ");
+        scanf("%d", &operacao);
+
+        if (operacao == -1) {
+            break;
+        }
+
+        if (operacao == 0) {  // Saque
+            int valor;
+            printf("Digite o valor a ser sacado: ");
+            scanf("%d", &valor);
+
+            if (valor <= 0) {
+                printf("Valor de saque deve ser positivo.\n");
+                continue;
+            }
+
+            int troco = valor;
+            int notas_utilizadas[NUM_NOTAS] = {0};
+
+            // Tentativa de realizar o saque
+            for (int i = 0; i < NUM_NOTAS; i++) {
+                while (troco >= notas[i] && quantidade[i] > 0) {
+                    troco -= notas[i];
+                    quantidade[i]--;
+                    notas_utilizadas[i]++;
+                }
+            }
+
+            if (troco > 0) {  // Se não foi possível realizar o saque completo
+                printf("Saque de R$ %d não realizado por falta de cédulas\n", valor);
+                // Reverter as cédulas utilizadas
+                for (int i = 0; i < NUM_NOTAS; i++) {
+                    quantidade[i] += notas_utilizadas[i];
+                }
+            } else {
+                printf("Saque de R$ %d efetuado\n", valor);
+            }
+
+        } else if (operacao == 1) {  // Depósito
+            int depositos[NUM_NOTAS];
+            printf("Digite a quantidade de cédulas a serem depositadas (R$ 100, R$ 50, R$ 20, R$ 10, R$ 5, R$ 2, R$ 1): ");
+            for (int i = 0; i < NUM_NOTAS; i++) {
+                scanf("%d", &depositos[i]);
+                quantidade[i] += depositos[i];
+            }
+            int total_deposito = 0;
+            for (int i = 0; i < NUM_NOTAS; i++) {
+                total_deposito += depositos[i] * notas[i];
+            }
+            printf("Depósito de R$ %d\n", total_deposito);
+        }
+
+        exibir_quantidade(quantidade, notas);
+    }
+
+    return 0;
+}
