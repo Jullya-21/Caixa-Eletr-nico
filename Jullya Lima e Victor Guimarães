@@ -1,3 +1,7 @@
+Jullya Barreto de Lima e Victor Guimarães Silva
+Data: 16/10/2024
+Esse código simula o funcionamento do caixa eletrônico do PindaíBank.
+
 #include <stdio.h>
 
 #define NUM_NOTAS 7
